@@ -1,7 +1,7 @@
 import os
 import sys
 import pygame as pg
-
+import random
 
 WIDTH, HEIGHT = 1600, 900
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -10,10 +10,20 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
+    bomb_x = random.uniform(10, WIDTH - 10)
+    bomb_y = random.uniform(10, HEIGHT - 10)
+    vx = 5
+    vy = 5
+    bomb = pg.Surface((20, 20))
+    pg.draw.circle(bomb, (255, 0, 0), (10, 10), 10)
+    bomb.set_colorkey((0, 0, 0))
     bg_img = pg.image.load("fig/pg_bg.jpg")    
     kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2.0)
     kk_rct = kk_img.get_rect()
     kk_rct.center = 900, 400
+    bomb_rct = bomb.get_rect()
+    bomb_rct.center = bomb_x, bomb_y
+
     clock = pg.time.Clock()
     tmr = 0
 
@@ -34,6 +44,8 @@ def main():
                 sum_mv[1] += tpl[1]
         kk_rct.move_ip(sum_mv)
         screen.blit(kk_img, kk_rct)
+        bomb_rct.move_ip(vx, vy)
+        screen.blit(bomb, bomb_rct)
         pg.display.update()
         tmr += 1
         clock.tick(50)
