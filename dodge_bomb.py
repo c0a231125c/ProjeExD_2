@@ -6,6 +6,18 @@ import random
 WIDTH, HEIGHT = 1600, 900
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
+    """
+    引数：こうかとんRectかばくだんRect
+    戻り値：タプル（横方向判定結果，縦方向判定結果）
+    画面内ならTrue，画面外ならFalse
+    """
+    yoko, tate = True, True
+    if obj_rct.left < 0 or WIDTH < obj_rct.right: #横方向判定
+        yoko = False
+    if obj_rct.top < 0 or HEIGHT < obj_rct.bottom: #縦方向判定
+        tate = False
+    return yoko, tate
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -43,12 +55,26 @@ def main():
                 sum_mv[0] += tpl[0]
                 sum_mv[1] += tpl[1]
         kk_rct.move_ip(sum_mv)
+        check_kk = check_bound(kk_rct)
+        if check_kk[0] == False or check_kk[1] == False:
+            sum_mv[0] =- sum_mv[0]
+            sum_mv[1] =- sum_mv[1] 
+            kk_rct.move_ip(sum_mv)
         screen.blit(kk_img, kk_rct)
+
         bomb_rct.move_ip(vx, vy)
+        check_bomb = check_bound(bomb_rct)
+        if check_bomb[0] == False:
+            vx *= -1
+            bomb_rct.move_ip(vx, 0)
+        if check_bomb[1] == False:
+            vy *= -1
+            bomb_rct.move_ip(0, vy)
         screen.blit(bomb, bomb_rct)
         pg.display.update()
         tmr += 1
         clock.tick(50)
+
 
 
 if __name__ == "__main__":
