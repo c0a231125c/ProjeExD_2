@@ -75,6 +75,9 @@ def main():
         tmr += 1
         clock.tick(50)
 
+        if kk_rct.colliderect(bomb_rct):
+            break
+
 
 
 if __name__ == "__main__":
