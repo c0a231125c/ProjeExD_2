@@ -6,6 +6,7 @@ import random
 WIDTH, HEIGHT = 1600, 900
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+
 def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
     """
     引数：こうかとんRectかばくだんRect
@@ -22,8 +23,8 @@ def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
-    bomb_x = random.uniform(10, WIDTH - 10)
-    bomb_y = random.uniform(10, HEIGHT - 10)
+    bomb_x = random.uniform(0, WIDTH)
+    bomb_y = random.uniform(0, HEIGHT)
     vx = 5
     vy = 5
     bomb = pg.Surface((20, 20))
@@ -45,9 +46,23 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
-        screen.blit(bg_img, [0, 0]) 
+        screen.blit(bg_img, [0, 0])
 
-        key_lst = pg.key.get_pressed()
+        kk_direction = {(-5, 0):pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2),
+                     (-5, 5):pg.transform.rotozoom(pg.image.load("fig/3.png"), 45, 2),
+                     (0, 5):pg.transform.rotozoom(pg.image.load("fig/3.png"), 90, 2),
+                     (5, 5):pg.transform.rotozoom(pg.image.load("fig/3.png"), 45, 2),
+                     (5, 0):pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2),
+                     (5, -5):pg.transform.rotozoom(pg.image.load("fig/3.png"), -45, 2),
+                     (0, -5):pg.transform.rotozoom(pg.image.load("fig/3.png"), 270, 2),
+                     (-5, -5):pg.transform.rotozoom(pg.image.load("fig/3.png"), 315, 2),
+                     (0, 0):pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2)}
+        
+        def direction(move):
+            return kk_direction[move]
+
+        
+        key_lst = pg.key.get_pressed()        
         sum_mv = [0, 0]
         for key in move:
             if key_lst[key]:
@@ -60,7 +75,17 @@ def main():
             sum_mv[0] =- sum_mv[0]
             sum_mv[1] =- sum_mv[1] 
             kk_rct.move_ip(sum_mv)
+
+        
+        if sum_mv == [0, -5] or sum_mv == [0, 5] or sum_mv == [5, 0] or sum_mv == [5, 5] or sum_mv == [5, -5]:
+            kk_img = direction(tuple(sum_mv))
+            kk_img = pg.transform.flip(kk_img, True, False)
+        else:
+            kk_img = direction(tuple(sum_mv))
         screen.blit(kk_img, kk_rct)
+
+        
+
 
         bomb_rct.move_ip(vx, vy)
         check_bomb = check_bound(bomb_rct)
