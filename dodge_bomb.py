@@ -20,6 +20,19 @@ def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
         tate = False
     return yoko, tate
 
+def direction(move):
+            return kk_direction[move]
+
+kk_direction = {(-5, 0):pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2),
+                     (-5, 5):pg.transform.rotozoom(pg.image.load("fig/3.png"), 45, 2),
+                     (0, 5):pg.transform.rotozoom(pg.image.load("fig/3.png"), 90, 2),
+                     (5, 5):pg.transform.rotozoom(pg.image.load("fig/3.png"), 45, 2),
+                     (5, 0):pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2),
+                     (5, -5):pg.transform.rotozoom(pg.image.load("fig/3.png"), -45, 2),
+                     (0, -5):pg.transform.rotozoom(pg.image.load("fig/3.png"), 270, 2),
+                     (-5, -5):pg.transform.rotozoom(pg.image.load("fig/3.png"), 315, 2),
+                     (0, 0):pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2)}
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -47,20 +60,7 @@ def main():
             if event.type == pg.QUIT: 
                 return
         screen.blit(bg_img, [0, 0])
-
-        kk_direction = {(-5, 0):pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2),
-                     (-5, 5):pg.transform.rotozoom(pg.image.load("fig/3.png"), 45, 2),
-                     (0, 5):pg.transform.rotozoom(pg.image.load("fig/3.png"), 90, 2),
-                     (5, 5):pg.transform.rotozoom(pg.image.load("fig/3.png"), 45, 2),
-                     (5, 0):pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2),
-                     (5, -5):pg.transform.rotozoom(pg.image.load("fig/3.png"), -45, 2),
-                     (0, -5):pg.transform.rotozoom(pg.image.load("fig/3.png"), 270, 2),
-                     (-5, -5):pg.transform.rotozoom(pg.image.load("fig/3.png"), 315, 2),
-                     (0, 0):pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2)}
         
-        def direction(move):
-            return kk_direction[move]
-
         
         key_lst = pg.key.get_pressed()        
         sum_mv = [0, 0]
